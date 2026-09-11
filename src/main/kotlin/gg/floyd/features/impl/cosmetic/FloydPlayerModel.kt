@@ -70,14 +70,14 @@ object FloydPlayerModel : Module(
 
     @JvmStatic
     fun isActiveFor(id: Int): Boolean =
-        if (mc.player?.id == id) enabled else FloydSharedCosmetics.appearanceForEntity(id)?.model?.enabled == true
+        if (FloydSelfPlayer.isSelf(id)) enabled else FloydSharedCosmetics.appearanceForEntity(id)?.model?.enabled == true
 
     @JvmStatic
     fun selectedModel(): String = FloydPlayerModelSelection.selectedName(model)
 
     @JvmStatic
     fun selectedModelFor(id: Int): String =
-        if (mc.player?.id == id) selectedModel()
+        if (FloydSelfPlayer.isSelf(id)) selectedModel()
         else FloydPlayerModelSelection.canonicalModelName(FloydSharedCosmetics.appearanceForEntity(id)?.model?.id)
             ?: FloydPlayerModelSelection.models.first()
 
@@ -95,7 +95,7 @@ object FloydPlayerModel : Module(
 
     @JvmStatic
     fun shouldShowHeadsFor(id: Int): Boolean =
-        if (mc.player?.id == id) showHeads
+        if (FloydSelfPlayer.isSelf(id)) showHeads
         else FloydSharedCosmetics.appearanceForEntity(id)?.model?.showHeads ?: false
 
     @JvmStatic
