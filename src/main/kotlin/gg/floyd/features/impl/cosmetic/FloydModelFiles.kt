@@ -38,11 +38,15 @@ data class ModelFileEntry(val name: String, val fileName: String, val path: Path
  * replaced or inspected, and any OBJ/GLB dropped in is selectable through the Player Model module.
  */
 internal object FloydModelFiles {
-    private const val BUNDLED_DIR = "player_models"
     private val bundledFiles = listOf(
-        "low_poly_tung.obj", "low_poly_tung.png", "low_poly_tung.CREDITS.txt",
-        "tung_tung_sahur.glb", "tung_tung_sahur.png", "tung_tung_sahur.CREDITS.txt",
-        "jenny_dressed.json", "jenny_dressed.png",
+        "player_models/low_poly_tung.obj" to "low_poly_tung.obj",
+        "textures/entity/player_model/low_poly_tung.png" to "low_poly_tung.png",
+        "player_models/low_poly_tung.CREDITS.txt" to "low_poly_tung.CREDITS.txt",
+        "player_models/tung_tung_sahur.glb" to "tung_tung_sahur.glb",
+        "textures/entity/player_model/tung_tung_sahur.png" to "tung_tung_sahur.png",
+        "player_models/tung_tung_sahur.CREDITS.txt" to "tung_tung_sahur.CREDITS.txt",
+        "player_models/jenny_dressed.json" to "jenny_dressed.json",
+        "textures/entity/player_model/jenny_dressed.png" to "jenny_dressed.png",
     )
 
     /** Flat white fallback, used when a model has no sidecar PNG next to it. */
@@ -64,10 +68,10 @@ internal object FloydModelFiles {
         seeded = true
         runCatching {
             Files.createDirectories(modelDir)
-            for (fileName in bundledFiles) {
+            for ((source, fileName) in bundledFiles) {
                 val target = modelDir.resolve(fileName)
                 if (Files.exists(target)) continue
-                val resource = "/assets/${FloydAddonsMod.MOD_ID}/$BUNDLED_DIR/$fileName"
+                val resource = "/assets/${FloydAddonsMod.MOD_ID}/$source"
                 FloydModelFiles::class.java.getResourceAsStream(resource)?.use { input ->
                     Files.copy(input, target)
                 }
